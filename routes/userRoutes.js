@@ -14,6 +14,9 @@ userRouter.param('id',userController.validateId);
 //Special Route Just for Authentication On Signup/Creation
 userRouter.post('/signup',authController.signup)
 
+//Special Route for loginIn user
+userRouter.post('/login',authController.login)
+
 //1->GetAll/Create-New Users
 userRouter.route('/')
 .get(userController.getAllUsers)         // Since UserController has the handler to the request event

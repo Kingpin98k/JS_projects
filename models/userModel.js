@@ -47,6 +47,12 @@ userSchema.pre('save',async function(next){  //also known as mongooseHook
     next();
 })
 
+//An Instance method that will be available in all the documents of user model
+userSchema.methods.comparePasswords = async function (candidatePassword,userPassword){
+    //We cannot use this.password since it is not selected
+    return await bcrypt.compare(candidatePassword,userPassword)
+}
+
 
 //Creating the Model Out of the Schema
 const User = mongoose.model("User",userSchema)
