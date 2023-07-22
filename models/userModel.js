@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
 //Creating The Schema
 const userSchema = new mongoose.Schema({
@@ -32,7 +33,10 @@ const userSchema = new mongoose.Schema({
             },
             message:"Passwords are Not the Same !"
         }
-    }
+    },
+    passwordChangedAt:Date,
+    passwordResetToken:String,
+    passwordResetExpires:Date
 })
 
 //Using MongooseMiddleware to Encrypt the password Before Saving it...
@@ -53,6 +57,30 @@ userSchema.methods.comparePasswords = async function (candidatePassword,userPass
     return await bcrypt.compare(candidatePassword,userPassword)
 }
 
+//An Instance method to check if the password was changed after logging in so we should no allow access before logging In again
+userSchema.methods.isPasswordChangedAfter = function(jwt_creation_time){
+    if(this.passwordChangedAt){
+        const password_changed_time = parseInt(this.passwordChangedAt.getTime()/1000,10);  //getTime() to convert given date to ms
+        return jwt_creation_time < password_changed_time;
+    }
+    return false;
+}
+
+//An Instance method for creating random tokens for Password Reset
+userSchema.methods.generateResetToken = function(){
+    //Creating the token(Standard Procedure)
+    const unencryptedResetToken = crypto.randomBytes(32).toString('hex')
+    const encryptedResetToken = crypto.hash('sha256').update(unencryptedResetToken).digest('hex')
+    
+    //These will not be fully saved until user.save() is called
+    //Saving to DB
+    //Reset Token
+    this.passwordResetToken = encryptedResetToken
+    //Expires In
+    this.passwordResetExpires = Date.now()+10*60*1000  //To convert 10mins to milliseconds
+    //Returning the newely created token to be given to user
+    return unencryptedResetToken
+}
 
 //Creating the Model Out of the Schema
 const User = mongoose.model("User",userSchema)

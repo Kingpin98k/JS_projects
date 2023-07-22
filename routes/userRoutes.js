@@ -17,9 +17,16 @@ userRouter.post('/signup',authController.signup)
 //Special Route for loginIn user
 userRouter.post('/login',authController.login)
 
+//Special Routes for Resetting Password
+//Forgot Password (Will get reset token via email)
+userRouter.post('/forgotPassword',authController.forgotPassword)
+//Reset Password (will reset the password using the token received)
+userRouter.post('/resetPassword',authController.resetPassword)
+
+
 //1->GetAll/Create-New Users
 userRouter.route('/')
-.get(userController.getAllUsers)         // Since UserController has the handler to the request event
+.get(authController.protect,userController.getAllUsers)         // Since UserController has the handler to the request event
 .post(userController.createNewUser);
 
 //2->Get/Patch/Delete Specific User

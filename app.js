@@ -140,6 +140,9 @@ const tourRouter = require('./routes/tourRoutes')
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/tours',tourRouter)
 
+//Now Implementing A Global Error Handling Middleware:
+app.use(globalErrroHandler)
+
 //If the program was able to get to "this" point then this means it was not handled by any of the outher route handlers
 //Implementing a route handler to handle-unhandled/incorrect routes
 app.all('*',(req,res,next)=>{
@@ -153,10 +156,6 @@ app.all('*',(req,res,next)=>{
     //Also whatever we pass Into next() express automatically assumes it is an error
     next(err)
 })
-
-
-//Now Implementing A Global Error Handling Middleware:
-app.use(globalErrroHandler)
 
 //-----------------------------------------------------------------------------------------------
 //Now we will export the express object to keep the server and express functionalities in seperate files
