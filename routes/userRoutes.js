@@ -19,10 +19,9 @@ userRouter.post('/login',authController.login)
 
 //Special Routes for Resetting Password
 //Forgot Password (Will get reset token via email)
-userRouter.post('/forgotPassword',authController.forgotPassword)
+userRouter.post('/forgotPassword',authController.forgotPassword);
 //Reset Password (will reset the password using the token received)
-userRouter.post('/resetPassword',authController.resetPassword)
-
+userRouter.patch('/resetPassword/:token',authController.resetPassword);
 
 //1->GetAll/Create-New Users
 userRouter.route('/')

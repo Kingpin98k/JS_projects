@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
+const AppError = require('../utils/appError')
 
 //Creating The Schema
 const userSchema = new mongoose.Schema({
@@ -51,6 +52,16 @@ userSchema.pre('save',async function(next){  //also known as mongooseHook
     next();
 })
 
+userSchema.pre('save',function(next){
+    //Checking if the password was not ! modified or the user is newely created 
+    if(!this.isModified("password")||this.isNew) return next()
+    
+    //Sometimes passwrord updation in db takes more time then teh creation of JWT this makes it seem like password was changed after jwt was created
+    //so we reduce one second from password creation time to cover up for that !!
+    this.passwordChangedAt = Date.now()-1000
+    next()
+})
+
 //An Instance method that will be available in all the documents of user model
 userSchema.methods.comparePasswords = async function (candidatePassword,userPassword){
     //We cannot use this.password since it is not selected
@@ -70,7 +81,7 @@ userSchema.methods.isPasswordChangedAfter = function(jwt_creation_time){
 userSchema.methods.generateResetToken = function(){
     //Creating the token(Standard Procedure)
     const unencryptedResetToken = crypto.randomBytes(32).toString('hex')
-    const encryptedResetToken = crypto.hash('sha256').update(unencryptedResetToken).digest('hex')
+    const encryptedResetToken = crypto.createHash('sha256').update(unencryptedResetToken).digest('hex')
     
     //These will not be fully saved until user.save() is called
     //Saving to DB
@@ -81,6 +92,13 @@ userSchema.methods.generateResetToken = function(){
     //Returning the newely created token to be given to user
     return unencryptedResetToken
 }
+
+//An Instance method to check whether the token has expired or not
+userSchema.methods.hasResetTokenExpired = function(){
+    return this.passwordResetExpires<Date.now()+10*60*1000 
+}
+
+
 
 //Creating the Model Out of the Schema
 const User = mongoose.model("User",userSchema)

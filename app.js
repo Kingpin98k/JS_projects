@@ -7,6 +7,12 @@ const AppError = require('./utils/appError')
 
 //This is the Global Error Handler Middleware
 const globalErrroHandler = require('./controllers/errorController')
+
+//Creating "Users" Route for API Version 1  (A new Way Of Coding)
+//This router is created in a seperate file under "routes" folder
+//We will just import it and use It for USERS CRUD
+const userRouter = require('./routes/userRoutes')
+const tourRouter = require('./routes/tourRoutes')
 //---------------------------------------------------------------------------------------------
 
 //Implementing Morgan Middleware
@@ -130,11 +136,6 @@ app.use((req,res,next)=>{
 
 
 //-----------------------------------------------------------------------------------------------
-//Creating "Users" Route for API Version 1  (A new Way Of Coding)
-//This router is created in a seperate file under "routes" folder
-//We will just import it and use It for USERS CRUD
-const userRouter = require('./routes/userRoutes')
-const tourRouter = require('./routes/tourRoutes')
 
 //Mounting the router and using it as Middleware
 app.use('/api/v1/users',userRouter)
