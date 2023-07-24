@@ -52,6 +52,7 @@ userSchema.pre('save',async function(next){  //also known as mongooseHook
     next();
 })
 
+//Adding the passwordChangedAt -> time if the pasword was reset
 userSchema.pre('save',function(next){
     //Checking if the password was not ! modified or the user is newely created 
     if(!this.isModified("password")||this.isNew) return next()
@@ -59,6 +60,7 @@ userSchema.pre('save',function(next){
     //Sometimes passwrord updation in db takes more time then teh creation of JWT this makes it seem like password was changed after jwt was created
     //so we reduce one second from password creation time to cover up for that !!
     this.passwordChangedAt = Date.now()-1000
+    //We are not calling save() here since after this middleware that function will be called automatically !!
     next()
 })
 

@@ -23,6 +23,12 @@ userRouter.post('/forgotPassword',authController.forgotPassword);
 //Reset Password (will reset the password using the token received)
 userRouter.patch('/resetPassword/:token',authController.resetPassword);
 
+//Update the password if the User is loggedIn currently
+userRouter.patch('/updatePassword',authController.protect,authController.updatePassword)
+
+//Update the credentials of user (Done By User Only) (User Needs to be logged In)
+userRouter.patch('/updateMe',authController.protect,userController.updateMe)
+
 //1->GetAll/Create-New Users
 userRouter.route('/')
 .get(authController.protect,userController.getAllUsers)         // Since UserController has the handler to the request event

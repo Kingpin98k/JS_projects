@@ -44,7 +44,7 @@ exports.login = catchAsync(async (req,res,next)=>{
       return next(new AppError("Email not present !!",404))
 
     if(!(await match.comparePasswords(password,match.password))) //using the instance method of user documents
-      return next(new AppError("Password Incorrect !!"))
+      return next(new AppError("Password Incorrect !!",400))
 
     //Sign and return the JWT
     const token = jwt.sign({id:match._id},process.env.JWT_SECRET,{
@@ -161,4 +161,31 @@ exports.resetPassword = catchAsync (async (req,res,next)=>{
     token,
     user:user
    })
+})
+
+exports.updatePassword = catchAsync(async (req,res,next)=>{
+   //1) Get the user from the collection
+   const user = await User.findById(req.user._id).select("+password")
+   console.log(user)
+   if(!user) return next(new AppError("The User doesnot exist !!",400))
+   //2) Check if the POSTed currentpassword is correct
+   const  { currentPassword,newPassword,newPasswordConfirm } = req.body
+   if(!currentPassword||!newPassword||!newPasswordConfirm) return next(new AppError("CurrentPassword,New-Password and New-Password Confirm fields are required !!",400))
+   if(!(await user.comparePasswords(currentPassword,user.password))) return next(new AppError("Password Incorrect !!",400))
+   //3) Update the password
+   user.password = newPassword
+   user.confirmPassword = newPasswordConfirm
+
+   //We need to save the password always since if we update it using findAndUpdate() then none of the middlewares would work
+   await user.save()
+   //4) Log the user In and send the JWT
+   const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{
+      //Expires in
+      expiresIn:process.env.JWT_EXPIRES_IN
+    })
+    res.status(200).json({
+       status:"Logged.In Successfully",
+       token,
+       userName:user.name
+    })
 })

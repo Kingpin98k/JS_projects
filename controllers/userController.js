@@ -2,6 +2,7 @@
 
 const catchAsync = require("../utils/catchAsync")
 const User = require('../models/userModel')
+const AppError = require("../utils/appError")
 
 //Callback Function for param middleware to check for id
 exports.validateId =  (req,res,next,val)=>{
@@ -16,6 +17,34 @@ exports.getAllUsers = catchAsync(async (req,res)=>{
     users:allUsers
   })
 })
+
+//Function for filtering data before updating user's Info so that only allowed fields are Included
+const filterObj = (obj,...fields)=>{
+  const newObj = {}
+  Object.keys(obj).forEach(el=>{
+    if(fields.includes(el)){
+      newObj[el] = obj[el]
+    }
+  })
+  return newObj
+}
+
+//This is a handler for the loggedIn user to update his own credentials such as email and name etc.
+exports.updateMe = catchAsync(async (req,res,next)=>{
+  //1) Create error if user posts password data :
+  if(req.body.password||req.body.confirmPassword) return next(new AppError("This route is not for password updates please use Patch to reaset Password",400))
+  //2) Update user document
+  const filteredObj = filterObj(req.body,"name","email")
+  const user  = await User.findByIdAndUpdate(req.user.id,filteredObj,{
+    runValidators:true,
+    new:true
+  }) //this id we are getting from the user object that we attached to request object
+  res.status(202).json({
+    status:"Successfully Updated",
+    user:user
+  })
+})
+
 exports.createNewUser = (req,res)=>{
     res.send("Not Yet Created")
 }
