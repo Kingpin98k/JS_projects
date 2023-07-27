@@ -1,6 +1,41 @@
 const express = require("express")
+const mongoSanitize = require('express-mongo-sanitize')
+const xss = require('xss-clean')
+
+//Module for HTTP Parameter Pollution
+const hpp = require('hpp')
+
+//Added Security Headers
+const helmet = require('helmet')
 //This will provide our app with an Instance of Express
 const app = express()
+
+//Data Sanitization
+//----------------------------------------------------------------------
+//1) Against NoSQL Query Injection
+app.use(mongoSanitize())
+
+//2) Against XSS/Cross Site Scripting
+app.use(xss())
+
+//----------------------------------------------------------------------
+
+//Preventing HTTP Parameter Pollution such as (/tours/sort=price&sort=difficulty)
+app.use(hpp({
+    //In case there more than one params with the same name it will only keep the last one
+    //Whitelisting some of the fields which do work for the above HTTP Parameter structure
+    whitelist:[
+        "duration",
+        "price",
+        "ratingsAverage",
+        "maxGropuSize",
+        "difficultyQuantity",
+        "difficulty"
+    ]
+}))
+
+//Security Headers
+app.use(helmet())
 
 //This Is Our Custom Error Class
 const AppError = require('./utils/appError')
@@ -8,11 +43,29 @@ const AppError = require('./utils/appError')
 //This is the Global Error Handler Middleware
 const globalErrroHandler = require('./controllers/errorController')
 
+//This is a package that provides a rateLimiter middleware that limits the amount of requests from an ip to a particular route...
+const rateLimiter = require('express-rate-limit')
+
+
+//Creating a rate limiter 
+const limiter = rateLimiter({
+    //Amount of requests per window 
+    max:100,
+    //Window size in ms
+    windowMs:60*60*1000, //one hour
+    //Message on error
+    message:"Too many requests from this IP, try again in an hour !!"
+})
+//using the limiter middleware
+app.use('/api',limiter)
+
+
 //Creating "Users" Route for API Version 1  (A new Way Of Coding)
 //This router is created in a seperate file under "routes" folder
 //We will just import it and use It for USERS CRUD
 const userRouter = require('./routes/userRoutes')
 const tourRouter = require('./routes/tourRoutes')
+const reviewRouter = require('./routes/reviewRoutes')
 //---------------------------------------------------------------------------------------------
 
 //Implementing Morgan Middleware
@@ -23,7 +76,8 @@ if(process.env.NODE_ENV==='development'){
     app.use(morgan('dev'))
 }
 
-app.use(express.json())
+//Body Parser converting data from body int req.body
+app.use(express.json({limit:'32kb'}))  //setting the body limit ot 10kb
 
 //Custom Middleware to set the current ime to request object
 app.use((req,res,next)=>{
@@ -140,7 +194,7 @@ app.use((req,res,next)=>{
 //Mounting the router and using it as Middleware
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/tours',tourRouter)
-
+app.use('/api/v1/reviews',reviewRouter)
 //Now Implementing A Global Error Handling Middleware:
 app.use(globalErrroHandler)
 

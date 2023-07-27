@@ -104,7 +104,9 @@ exports.getAllTours = catchAsync(async (req, res,next) => {
 
 //2->Get A Specific Tour decided by quaryParams
 exports.getSelectedTours = catchAsync(async (req,res,next)=>{
-  const selectedTour = await Tour.findById(req.params.id)
+
+  //When the user query for a siingle tour we also populate the (virtual) "reviews" field along with all the data about the tour
+  const selectedTour = await Tour.findById(req.params.id).populate('reviews') //reviews-> name of the virtual field
   
   //If the tourId does not match mongoDb sets data to null and response code is 200 
   //but we want to set it to 404 

@@ -45,6 +45,17 @@ exports.updateMe = catchAsync(async (req,res,next)=>{
   })
 })
 
+//This is a handler for letting the LoggedIn user set his account to inactive
+exports.deleteMe = catchAsync (async(req,res,next)=>{
+  //we are setting active as false here
+  //we also need to make a query middleware such that each time someone queries with a find at start we only send them the users whicg are active
+  //so we make this query middleware in userModel.js
+   await User.findByIdAndUpdate(req.user.id,{$set:{active:false}})
+   res.status(204).json({
+    status:"Successfully Deleted"
+   })
+})
+
 exports.createNewUser = (req,res)=>{
     res.send("Not Yet Created")
 }

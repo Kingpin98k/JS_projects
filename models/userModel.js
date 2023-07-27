@@ -37,7 +37,12 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt:Date,
     passwordResetToken:String,
-    passwordResetExpires:Date
+    passwordResetExpires:Date,
+    active:{
+        type:Boolean,
+        default:true,
+        select:false
+    }
 })
 
 //Using MongooseMiddleware to Encrypt the password Before Saving it...
@@ -100,6 +105,11 @@ userSchema.methods.hasResetTokenExpired = function(){
     return this.passwordResetExpires<Date.now()+10*60*1000 
 }
 
+//adding a query middleware that only sends the active users to anyone who queries for them usin "find" at start
+userSchema.pre(/^find/,function(next){  //Regex to catch any query starting with find
+   this.find({active:{$ne : false}})   //Important this adds this added filter to the current users
+   next()
+})
 
 
 //Creating the Model Out of the Schema

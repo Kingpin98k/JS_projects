@@ -29,6 +29,9 @@ userRouter.patch('/updatePassword',authController.protect,authController.updateP
 //Update the credentials of user (Done By User Only) (User Needs to be logged In)
 userRouter.patch('/updateMe',authController.protect,userController.updateMe)
 
+//Make the user delete himself if he is logged in (Just making him inactive)
+userRouter.delete('/deleteMe',authController.protect,userController.deleteMe)
+
 //1->GetAll/Create-New Users
 userRouter.route('/')
 .get(authController.protect,userController.getAllUsers)         // Since UserController has the handler to the request event

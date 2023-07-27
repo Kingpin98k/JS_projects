@@ -1,7 +1,7 @@
 //This is usde to fill-up the database through post requests
 const fs = require('fs')
 
-const data = fs.readFileSync("C:\\Users\\Lenovo\\Desktop\\TourPackage\\dev-data\\data\\tours_simple.json")
+const data = fs.readFileSync("./dev-data/data/tours_simple.json")
 const jsonObj = JSON.parse(data)
 
 const promise_func = jsonObj.map(async (val)=>{

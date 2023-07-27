@@ -1,3 +1,7 @@
 -> We allow user to "forget and reset" his password via email
 
 -> We also allow a "logged in" user to change his password directly by sending a "patch" request
+
+Best Security Practices:
+
+1.

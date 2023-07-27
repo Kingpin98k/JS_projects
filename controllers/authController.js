@@ -1,13 +1,48 @@
 //This is the User Authentication controller Used when First Creating the User
 
 //Importing Json Web Token
+const crypto = require('crypto');
+const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
-const AppError = require('../utils/appError')
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
-const { promisify } = require('util')
 const sendEmail = require("../utils/sendEmail")
-const crypto = require('crypto')
+const AppError = require('../utils/appError')
+
+//This is a function to create and send the JWT when all the middleware checking is done
+//It also sends a jwt cookie to be stored by the browser !!
+const createSendToken = (user,statusCode,res)=>{
+  //Creating and signing the  webtoken
+  const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{
+   //An option..
+   expiresIn:process.env.JWT_EXPIRES_IN
+})
+
+//these are the cookie options...
+const cookieOptions = {
+   //converting into ms
+   expiresIn:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES_IN*24*60*60),
+   //this will prevent the browser from accessing the cookie and make it transportOnly
+   httpOnly:true
+}
+
+//since https is only available in production
+if(process.env.NODE_ENV==='production') cookieOptions.secure=true
+
+//making and sending the cookie
+//cookie is the only response that we can send along with the main response
+res.cookie('jwt',token,cookieOptions)
+
+//Removing the password element since it is selected using explicit select==true in the middlewares for password checking
+user.password = undefined
+
+res.status(statusCode).json({
+ status:"Created Succcessfully",
+ //Sending the token to the user to save it locally 
+ token,
+ user:user
+})
+}
 
 exports.signup = catchAsync(async (req,res,next)=>{
    //Create the user with only required fields form the body to keep anyone from defining the role as admin
@@ -17,19 +52,7 @@ exports.signup = catchAsync(async (req,res,next)=>{
       password:req.body.password,
       confirmPassword:req.body.confirmPassword
    })
-
-   //Creating and signing the  webtoken
-   const token = jwt.sign({id:newUser._id},process.env.JWT_SECRET,{
-      //An option..
-      expiresIn:process.env.JWT_EXPIRES_IN
-   })
-
-   res.status(201).json({
-    status:"Created Succcessfully",
-    //Sending the token to the user to save it locally 
-    token,
-    user:newUser
-   })
+   createSendToken(newUser,201,res)
 })
 
 exports.login = catchAsync(async (req,res,next)=>{
@@ -47,15 +70,7 @@ exports.login = catchAsync(async (req,res,next)=>{
       return next(new AppError("Password Incorrect !!",400))
 
     //Sign and return the JWT
-    const token = jwt.sign({id:match._id},process.env.JWT_SECRET,{
-      //Expires in
-      expiresIn:process.env.JWT_EXPIRES_IN
-    })
-    res.status(200).json({
-       status:"Loged.In Successfully",
-       token,
-       userName:match.name
-    })
+    createSendToken(match,201,res)
 })
 
 exports.protect = catchAsync(async (req,res,next)=>{
@@ -150,17 +165,7 @@ exports.resetPassword = catchAsync (async (req,res,next)=>{
 
 //4) Log the user in, send JWT
    //Creating and signing the  webtoken
-   const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{
-      //An option..
-      expiresIn:process.env.JWT_EXPIRES_IN
-   })
-
-   res.status(201).json({
-    status:"Created Succcessfully",
-    //Sending the token to the user to save it locally 
-    token,
-    user:user
-   })
+   createSendToken(user,201,res)
 })
 
 exports.updatePassword = catchAsync(async (req,res,next)=>{
@@ -179,13 +184,5 @@ exports.updatePassword = catchAsync(async (req,res,next)=>{
    //We need to save the password always since if we update it using findAndUpdate() then none of the middlewares would work
    await user.save()
    //4) Log the user In and send the JWT
-   const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{
-      //Expires in
-      expiresIn:process.env.JWT_EXPIRES_IN
-    })
-    res.status(200).json({
-       status:"Logged.In Successfully",
-       token,
-       userName:user.name
-    })
+   createSendToken(user,201,res)
 })
