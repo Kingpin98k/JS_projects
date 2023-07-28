@@ -52,10 +52,19 @@ exports.deleteMe = catchAsync (async(req,res,next)=>{
    })
 })
 
+//--------------------->>ME<<-------------------------------------
+//Creating a middleware for adding user_id to the params for getOne()
+exports.getMe = (req,res,next)=>{
+  req.params.id = req.user.id
+  next()
+}
+
+exports.getSelectedUser = factory.getOne(User)
+
 exports.createNewUser = (req,res)=>{
     res.send("Not Yet Created")
 }
-exports.getSelectedUser = factory.getOne(User)
+
 exports.updateUser = (req,res)=>{
     res.send("Not Yet Created")
 }

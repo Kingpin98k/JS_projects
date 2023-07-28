@@ -53,7 +53,6 @@ if(!doc){
 
 //>.GET ONE DOCUMENT
 exports.getOne = Model =>catchAsync(async (req,res,next)=>{
-  
   const doc = await Model.findById(req.params.id)
   if(!doc){
     return next(new AppError('No Document found with that ID', 404)) 
