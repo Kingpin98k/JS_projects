@@ -3,6 +3,17 @@ const express = require('express')
 //Since we are using MVC Architecture we will have to import the controllers/handlers form "userController"
 const tourController = require("../controllers/tourController")
 
+//----------------------->>NESTED ROUTES<<---------------------------------------------//
+                                                                                       //
+//Importing authController ans reviewController to implement Nested Routes             //
+const authController = require('../controllers/authController')                        //
+//const reviewController = require('../controllers/reviewController')                  //
+                                                                                       //
+//Now For implementing nested routes we are using mergeParams and router mounting      //
+const reviewRouter = require('./reviewRoutes')                                         //
+                                                                                       //
+//----------------------->>NESTED_ROUTES_END<<-----------------------------------------//
+
 //----------------------------------------------------------------------------------------------------------------
 //Here we create tne Router and will Mount it to '/api/v1/tours' for handling requests
 const tourRouter = express.Router()
@@ -28,6 +39,14 @@ tourRouter.route('/:id')                 //As the mounting has already been done
 .get(tourController.getSelectedTours)
 .patch(tourController.updateTours)
 .delete(tourController.deleteTours)
+
+//Implementing Nested Tour Routes for tours/_id/reviews
+// tourRouter.route('/:tourId/reviews')
+// .post(authController.protect,reviewController.createNewReview)
+// .get(reviewController.getAllReviews)
+
+//For Nested Routes
+tourRouter.use('/:tourId/reviews',reviewRouter)
 
 //Now We will have to Export the router
 module.exports = tourRouter
