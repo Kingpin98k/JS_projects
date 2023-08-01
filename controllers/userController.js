@@ -61,9 +61,15 @@ exports.getMe = (req,res,next)=>{
 
 exports.getSelectedUser = factory.getOne(User)
 
-exports.createNewUser = (req,res)=>{
-    res.send("Not Yet Created")
-}
+exports.createNewUser = catchAsync(async (req,res)=>{
+    if(!req.body.confirmPassword){
+      req.body.confirmPassword = req.body.password
+    }
+    await User.create(req.body)
+    res.status(201).json({
+      status:"Successfully Created"
+    })
+})
 
 exports.updateUser = (req,res)=>{
     res.send("Not Yet Created")
