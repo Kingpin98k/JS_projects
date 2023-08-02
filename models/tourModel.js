@@ -122,6 +122,9 @@ const tourSchema = new mongoose.Schema(
       toObject: { virtuals: true }
     }
   )
+
+//Creating indexes for Price and ratingsAverage field so that their filtering becomes faster
+tourSchema.index({price:1,ratingsAverage:-1})
   
 /*Embedding Guides
   //This is to embed the user(Guide) into the corrosponding tour document
@@ -151,6 +154,10 @@ tourSchema.virtual('reviews',{
   foreignField:'tour', //reference's foreign field
   localField:'_id'  //tours local field
 })
+
+
+//------------------------------>GEOSPATIAL INDEXING<-----------------------------------
+tourSchema.index({startLocation:'2dsphere'})
 
 //Creating the Model Out of the Schema
 const Tour = mongoose.model("Tour",tourSchema)

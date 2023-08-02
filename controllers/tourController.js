@@ -164,3 +164,21 @@ exports.deleteTours = catchAsync(async (req,res,next)=>{
       deleted_tour:deleatedTour
   })
 })
+
+//GetToursWithin Geospatial Data
+exports.getToursWithin = catchAsync(async (req,res,next)=>{
+   const { distance,latlng,unit } = req.params
+   const [ lat , lng] = latlng.split(',')
+   if(!lat||!lng) return next(new AppError("Both latitude and longitude are required",400));   
+   const radius = unit==='mi'? distance/3963.2 : distance/6378.1
+   const tours = await Tour.find({
+    startLocation:{$geoWithin:{
+      $centerSphere:[[lng,lat],radius]
+    }}
+  })
+  res.status(200).json({
+    status:"Successful",
+    found:tours.length,
+    tours:tours
+  })
+})

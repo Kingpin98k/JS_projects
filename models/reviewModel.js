@@ -32,7 +32,10 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true } 
   })
 
-  //This is a middleware that populates the user whenever we query for reviews
+//Indexing the tour and user to make user-tour review combo unique
+reviewSchema.index({tour:1,user:1},{unique:true})
+
+//This is a middleware that populates the user whenever we query for reviews
 reviewSchema.pre(/^find/,function(next){
     this.populate({
     path:'user',

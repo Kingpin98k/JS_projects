@@ -2,6 +2,9 @@ const express = require("express")
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 
+//Path module this stores the path to the project directory 
+const path = require('path')
+
 //Module for HTTP Parameter Pollution
 const hpp = require('hpp')
 
@@ -186,8 +189,19 @@ app.use((req,res,next)=>{
 //     }
 // })
 //-----------------------------------------------------------------------------------------------
+//----------------------------->>RENDERING PUG FILES<<-------------------------------------------
 
+// An Express method used to configure settings for the application. In this case, we are setting the 'views' setting.
+app.set('view engine','pug')
+//path.join() is used to construct an absolute path to the 'views' directory.
+// __dirname is a Node.js variable that represents the current directory, and 'views' is the name of the folder containing our view templates.
+app.set('views',path.join(__dirname,'views'))
 
+//Now setting up the route for showing the rendered page
+app.get('/',(req,res,next)=>{
+    //We need to send the html in response object
+    res.status(200).render('base')  //We just need to specify the name of file since we have already set the folder for getting the views
+})
 
 //-----------------------------------------------------------------------------------------------
 

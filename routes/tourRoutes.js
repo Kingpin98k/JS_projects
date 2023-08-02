@@ -24,6 +24,10 @@ const tourRouter = express.Router()
 //Param Middleware to check if the Id is Valid Or Not
 //tourRouter.param('id',tourController.validateId)
 
+//Special route for toursWithin a given radius from the given location
+tourRouter.route('/tours-within/:distance/center/:latlng/unit/:unit')
+.get(tourController.getToursWithin);
+
 //Alias Route to search for top 5 tours fast 
 tourRouter
   .route('/top-5-cheap')
@@ -39,6 +43,7 @@ tourRouter.route('/:id')                 //As the mounting has already been done
 .get(tourController.getSelectedTours)
 .patch(tourController.updateTours)
 .delete(tourController.deleteTours)
+
 
 //Implementing Nested Tour Routes for tours/_id/reviews
 // tourRouter.route('/:tourId/reviews')
