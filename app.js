@@ -69,6 +69,7 @@ app.use('/api',limiter)
 const userRouter = require('./routes/userRoutes')
 const tourRouter = require('./routes/tourRoutes')
 const reviewRouter = require('./routes/reviewRoutes')
+const viewRouter = require('./routes/viewRoutes')
 //---------------------------------------------------------------------------------------------
 
 //Implementing Morgan Middleware
@@ -192,15 +193,18 @@ app.use((req,res,next)=>{
 //----------------------------->>RENDERING PUG FILES<<-------------------------------------------
 
 // An Express method used to configure settings for the application. In this case, we are setting the 'views' setting.
-app.set('view engine','pug')
+app.set('view engine','ejs')
 //path.join() is used to construct an absolute path to the 'views' directory.
 // __dirname is a Node.js variable that represents the current directory, and 'views' is the name of the folder containing our view templates.
 app.set('views',path.join(__dirname,'views'))
 
+// Serve static files from the "public" directory
+app.use(express.static('public'));
+
 //Now setting up the route for showing the rendered page
 app.get('/',(req,res,next)=>{
     //We need to send the html in response object
-    res.status(200).render('base')  //We just need to specify the name of file since we have already set the folder for getting the views
+    res.status(200).render('base',{tour:"The Park Camper",user:"I am the user"})  //We just need to specify the name of file since we have already set the folder for getting the views
 })
 
 //-----------------------------------------------------------------------------------------------
@@ -209,6 +213,7 @@ app.get('/',(req,res,next)=>{
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/tours',tourRouter)
 app.use('/api/v1/reviews',reviewRouter)
+app.use('/',viewRouter)
 //Now Implementing A Global Error Handling Middleware:
 app.use(globalErrroHandler)
 
