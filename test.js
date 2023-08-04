@@ -1,11 +1,11 @@
 //This is usde to fill-up the database through post requests
 const fs = require('fs')
 
-const data = fs.readFileSync("./dev-data/data/reviews.json")
+const data = fs.readFileSync("./dev-data/data/tours.json")
 const jsonObj = JSON.parse(data)
 
 const promise_func = jsonObj.map(async (val)=>{
-      await fetch('http://127.0.0.1:9999/api/v1/reviews', {
+      await fetch('http://127.0.0.1:9999/api/v1/tours', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

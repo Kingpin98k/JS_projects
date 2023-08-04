@@ -200,19 +200,13 @@ app.set('views',path.join(__dirname,'views'))
 
 // Serve static files from the "public" directory
 app.use(express.static('public'));
-
-//Now setting up the route for showing the rendered page
-app.get('/',(req,res,next)=>{
-    //We need to send the html in response object
-    res.status(200).render('base',{tour:"The Park Camper",user:"I am the user"})  //We just need to specify the name of file since we have already set the folder for getting the views
-})
-
 //-----------------------------------------------------------------------------------------------
 
 //Mounting the router and using it as Middleware
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/tours',tourRouter)
 app.use('/api/v1/reviews',reviewRouter)
+//Now setting up the route for showing the rendered page
 app.use('/',viewRouter)
 //Now Implementing A Global Error Handling Middleware:
 app.use(globalErrroHandler)

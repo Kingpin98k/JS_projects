@@ -137,7 +137,7 @@ tourSchema.index({price:1,ratingsAverage:-1})
  })
  */
 
-//-------------------------------> REFERENCDE <-----------------------------------------
+//-------------------------------> REFERENCED <-----------------------------------------
 //Creating a query Middleware to populate the Referenced data before sending the output
 tourSchema.pre(/^find/,function(next){
   //We can also pass an object specifying to select only certain fields in the output !!
