@@ -70,6 +70,7 @@ const userRouter = require('./routes/userRoutes')
 const tourRouter = require('./routes/tourRoutes')
 const reviewRouter = require('./routes/reviewRoutes')
 const viewRouter = require('./routes/viewRoutes')
+const cookieParser = require('cookie-parser')
 //---------------------------------------------------------------------------------------------
 
 //Implementing Morgan Middleware
@@ -82,6 +83,9 @@ if(process.env.NODE_ENV==='development'){
 
 //Body Parser converting data from body int req.body
 app.use(express.json({limit:'32kb'}))  //setting the body limit ot 10kb
+
+//Cookie Parser to allow express to access cookies incoming with browser requests
+app.use(cookieParser())
 
 //Custom Middleware to set the current ime to request object
 app.use((req,res,next)=>{

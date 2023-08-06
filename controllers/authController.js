@@ -73,11 +73,28 @@ exports.login = catchAsync(async (req,res,next)=>{
     createSendToken(match,201,res)
 })
 
+exports.logout = (req,res,next)=>{
+   //Setting the token to null
+   const token = ""
+   const cookieOptions = {
+      expiresIn:5,  //expires in 5ms
+      httpOnly:true
+   }
+   //sending the cookie with the same name overwrites the previous jwt
+   res.cookie('jwt',token,cookieOptions) 
+   res.status(200).json({
+      status:"success",
+      message:"Successfully Logged Out"
+   })
+}
+
 exports.protect = catchAsync(async (req,res,next)=>{
    let token;
    //1. Getting the token & Checking if it is there with the header??
    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
       token = req.headers.authorization.split(' ')[1];
+   }else if(req.cookies.jwt){   // To check for the jwt in cookie 
+     token = req.cookies.jwt
    }else{
       return next(new AppError("You are not LoggedIn please login to get access",401))
    }
@@ -97,6 +114,33 @@ exports.protect = catchAsync(async (req,res,next)=>{
    //but this is how we can pass refinde data from one middleware to another sequentially
    req.user = currentUser
 
+   next()
+})
+
+//This is a middle ware that checks if the user is logged in or not and based on that we render our template
+exports.isLoggedIn = catchAsync(async (req,res,next)=>{
+   //1. To check for the jwt in cookie 
+   if(req.cookies.jwt){  
+   //2. Verification of Token
+   const payload = await promisify(jwt.verify)(req.cookies.jwt,process.env.JWT_SECRET)
+
+   //3. Checking if the user still exists
+   const currentUser = await User.findById(payload.id)
+   if(!currentUser){
+      //We wont be calling any kind of error here
+      //as we only need to selectively render a different format
+      return next()
+   } 
+   //4. Checking if the user changed password after the token was issued ??
+   if(currentUser.isPasswordChangedAfter(payload.iat)){
+      return next()
+   }
+   
+   //USER IS LOGGED IN !!
+   res.locals.user = currentUser   //res.locals is similar to passing arguments when we call a template user will now be available in templates to use
+   }else{
+      res.locals.user = undefined
+   }
    next()
 })
 
