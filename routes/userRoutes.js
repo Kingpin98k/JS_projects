@@ -17,6 +17,9 @@ userRouter.post('/signup',authController.signup)
 //Special Route for loginIn user
 userRouter.post('/login',authController.login)
 
+//Route for logout
+userRouter.get('/logout',authController.logout)
+
 //Special Routes for Resetting Password
 //Forgot Password (Will get reset token via email)
 userRouter.post('/forgotPassword',authController.forgotPassword);

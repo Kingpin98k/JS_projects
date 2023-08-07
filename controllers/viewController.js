@@ -27,3 +27,4 @@ exports.getTour = catchAsync(async (req,res,next)=>{
 exports.loginUser = catchAsync(async (req,res,next)=>{
    res.status(200).render('login')
 })
+

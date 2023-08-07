@@ -19,9 +19,9 @@
     </div>
     <nav class="nav nav--user">
       <% if(user){ %>
-      <a href="" class="nav__el nav__el--logout">Logout</a>
+      <a href="#" id="logout/btn" class="nav__el nav__el--logout">Logout</a>
       <a href="#" class="nav__el">
-        <img class="nav__user-img" src="img/user.jpg" alt="User Photo">
+        <img class="nav__user-img" src="/img/users/<%= user.photo?user.photo:"user-1.jpg" %>" alt="User Photo">
         <span><%= user.name.split(' ')[0] %></span>
       </a>
       <% } else{ %>
