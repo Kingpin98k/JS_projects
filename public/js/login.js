@@ -11,7 +11,7 @@ const login = async (email,password)=>{
             password:password
         }
     })
-    if(res.data.status==='Created Succcessfully'){
+    if(res.data.status==='Created Successfully'){
       showAlert('success','Logged In Successfully')   //either 'success' or 'error'
       window.setTimeout(()=> {
         location.assign('/')
@@ -23,10 +23,11 @@ const login = async (email,password)=>{
 }
 
 //------------------------------------------------------------------------------------------
-
-document.querySelector('.form').addEventListener('submit',e=>{
+document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('login-form').addEventListener('submit',e=>{
     e.preventDefault();
     const email =document.getElementById('email').value
     const password = document.getElementById('password').value
     login(email,password)
+})
 })

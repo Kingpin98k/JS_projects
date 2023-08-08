@@ -33,4 +33,7 @@ viewRouter.get('/tour/:id',viewController.getTour)
 //This is the login Point
 viewRouter.get('/login',viewController.loginUser)
 
+//This is the signup Point
+viewRouter.get('/signup',viewController.signupUser)
+
 module.exports = viewRouter

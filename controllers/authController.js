@@ -37,7 +37,7 @@ res.cookie('jwt',token,cookieOptions)
 user.password = undefined
 
 res.status(statusCode).json({
- status:"Created Succcessfully",
+ status:"Created Successfully",
  //Sending the token to the user to save it locally 
  token,
  user:user

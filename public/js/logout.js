@@ -16,4 +16,6 @@ const logout = async ()=>{
     showAlert('error',err.response.data.message)
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('logout/btn').addEventListener('click',logout)
+})
