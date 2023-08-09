@@ -1,0 +1,88 @@
+<% 
+  function navItem(link, text, icon, active) { %>
+  <li class="<%= active ? 'side-nav--active' : '' %>">
+    <a href="<%= link %>">
+      <svg>
+        <use xlink:href="img/icons.svg#icon-<%= icon %>"></use>
+      </svg>
+      <%= text %>
+    </a>
+  </li>
+<% } %>
+
+<main class="main">
+  <div class="user-view">
+    <nav class="user-view__menu">
+      <ul class="side-nav">
+        <% navItem('#', 'Settings', 'settings', true); %>
+        <% navItem('/my-tours', 'My bookings', 'briefcase', false); %>
+        <% navItem('#', 'My reviews', 'star', false); %>
+        <% navItem('#', 'Billing', 'credit-card', false); %>
+      </ul>
+
+      <% if (user.role === 'admin') { %>
+        <div class="admin-nav">
+          <h5 class="admin-nav__heading">Admin</h5>
+          <ul class="side-nav">
+            <% navItem('#', 'Manage tours', 'map', false); %>
+            <% navItem('#', 'Manage users', 'users', false); %>
+            <% navItem('#', 'Manage reviews', 'star', false); %>
+            <% navItem('#', 'Manage bookings', 'briefcase', false); %>
+          </ul>
+        </div>
+      <% } %>
+    </nav>
+
+    <div class="user-view__content">
+      <div class="user-view__form-container">
+        <h2 class="heading-secondary ma-bt-md">Your account settings</h2>
+
+        <!-- WITHOUT API -->
+        <!-- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data') -->
+
+        <!-- WITH API -->
+        <form class="form form-user-data">
+          <div class="form__group">
+            <label class="form__label" for="name">Name</label>
+            <input id="name" class="form__input" type="text" value="<%= user.name %>" required name="name">
+          </div>
+          <div class="form__group ma-bt-md">
+            <label class="form__label" for="email">Email address</label>
+            <input id="email" class="form__input" type="email" value="<%= user.email %>" required name="email">
+          </div>
+          <div class="form__group form__photo-upload">
+            <img class="form__user-photo" src="/img/users/<%= user.photo %>" alt="User photo">
+            <input class="form__upload" type="file" accept="image/*" id="photo" name="photo">
+            <label for="photo">Choose new photo</label>
+          </div>
+          <div class="form__group right">
+            <button class="btn btn--small btn--green">Save settings</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="line">&nbsp;</div>
+
+      <div class="user-view__form-container">
+        <h2 class="heading-secondary ma-bt-md">Password change</h2>
+        <form class="form form-user-password">
+          <div class="form__group">
+            <label class="form__label" for="password-current">Current password</label>
+            <input id="password-current" class="form__input" type="password" placeholder="••••••••" required minlength="8">
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="password">New password</label>
+            <input id="password" class="form__input" type="password" placeholder="••••••••" required minlength="8">
+          </div>
+          <div class="form__group ma-bt-lg">
+            <label class="form__label" for="password-confirm">Confirm password</label>
+            <input id="password-confirm" class="form__input" type="password" placeholder="••••••••" required minlength="8">
+          </div>
+          <div class="form__group right">
+            <button class="btn btn--small btn--green btn--save-password">Save password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>

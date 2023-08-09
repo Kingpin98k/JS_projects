@@ -113,7 +113,7 @@ exports.protect = catchAsync(async (req,res,next)=>{
    //We save the current user in the request object for use in later middlewares...If Required !!
    //but this is how we can pass refinde data from one middleware to another sequentially
    req.user = currentUser
-
+   res.locals.user = currentUser
    next()
 })
 

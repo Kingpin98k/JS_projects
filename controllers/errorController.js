@@ -1,6 +1,6 @@
+/*eslint-disable*/
 //This is The GlobalErrorHandler Middleware
 //Simply import this in any module and use it...
-
 const AppError = require('../utils/appError');
 
 //-------------------------------------------------------------------------------------------
@@ -28,17 +28,27 @@ const handleJsonWebTokenError = err => new AppError("Invalid token Please Login 
 
 const handleTokenExpiredError = err=> new AppError("Token Expired Please Login again !!",401)
 //-------------------------------------------------------------------------------------------
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error:err,
-    message: err.message,
-    stack: err.stack
-  });
+const sendErrorDev = (err,req,res) => {
+  //Error handling for the API
+  if(req.originalUrl.startsWith('/api')){  
+    res.status(err.statusCode).json({
+      status: err.status,
+      error:err,
+      message: err.message,
+      stack: err.stack
+    });
+  }else{  //Error handling for the RENDERED WEBSITE
+    res.status(err.statusCode).render('error',{
+      title:"Something Went Wrong !",
+      msg:err.message
+    })
+  }
 };
 
-const sendErrorProd = (err, res) => {
-  // Operational, trusted error: send message to client
+const sendErrorProd = (err, req, res) => {
+  //---------------->>API PART<<---------------------------
+  if(req.originalUrl.startsWith('/api')){  
+      // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
@@ -56,6 +66,27 @@ const sendErrorProd = (err, res) => {
       message: 'Something went very wrong!'
     });
   }
+  } //--------------------->>WEBSITE PART<<----------------------------
+  else{
+  // Operational, trusted error: send message to client
+  if (err.isOperational) {
+    res.status(err.statusCode).render('error',{
+      title:"Something Went Wrong !",
+      msg:err.message
+    })
+
+  // Programming or other unknown error: don't leak error details
+  }else {
+    // 1) Log error
+    console.error('ERROR 💥', err);
+
+    // 2) Send generic message
+    res.status(err.statusCode).render('error',{
+      title:"Something Went Wrong !",
+      msg:"Please try again !!"
+    })
+  }
+  }
 };
 
 module.exports = (err, req, res, next) => {
@@ -65,7 +96,7 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err,req, res);
   } else if (process.env.NODE_ENV === 'production') {
     //Creating a new error object using err and Object Destructuring
     let error = { ...err };
@@ -76,7 +107,7 @@ module.exports = (err, req, res, next) => {
     //JWT Verification Errors
     if(error.name === "JsonWebTokenError") error = handleJsonWebTokenError(error)
     if(error.name === "TokenExpiredError") error = handleTokenExpiredError(error)
-    sendErrorProd(error, res);
+    sendErrorProd(error,req, res);
   }
 };
 

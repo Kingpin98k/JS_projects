@@ -22,18 +22,19 @@ viewRouter.use((req, res, next) => {
     next();
 });
 
-viewRouter.use(authController.isLoggedIn)
-
 //This is for the overview page 
-viewRouter.get('/',viewController.getOverview)
+viewRouter.get('/',authController.isLoggedIn,viewController.getOverview)
 
 //This is when enquiring for a specific tour
-viewRouter.get('/tour/:id',viewController.getTour)
+viewRouter.get('/tour/:id',authController.isLoggedIn,viewController.getTour)
 
 //This is the login Point
-viewRouter.get('/login',viewController.loginUser)
+viewRouter.get('/login',authController.isLoggedIn,viewController.loginUser)
 
 //This is the signup Point
-viewRouter.get('/signup',viewController.signupUser)
+viewRouter.get('/signup',authController.isLoggedIn,viewController.signupUser)
+
+//Accounts page
+viewRouter.get('/me',authController.protect,viewController.getAccount)
 
 module.exports = viewRouter
