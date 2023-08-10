@@ -37,11 +37,7 @@
       <div class="user-view__form-container">
         <h2 class="heading-secondary ma-bt-md">Your account settings</h2>
 
-        <!-- WITHOUT API -->
-        <!-- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data') -->
-
-        <!-- WITH API -->
-        <form class="form form-user-data">
+        <form class="form form-user-data" id="user-info-update-form">
           <div class="form__group">
             <label class="form__label" for="name">Name</label>
             <input id="name" class="form__input" type="text" value="<%= user.name %>" required name="name">
@@ -65,7 +61,7 @@
 
       <div class="user-view__form-container">
         <h2 class="heading-secondary ma-bt-md">Password change</h2>
-        <form class="form form-user-password">
+        <form class="form form-user-password" id="user-password-update-form">
           <div class="form__group">
             <label class="form__label" for="password-current">Current password</label>
             <input id="password-current" class="form__input" type="password" placeholder="••••••••" required minlength="8">

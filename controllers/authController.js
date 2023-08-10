@@ -1,3 +1,4 @@
+/*eslint-disable*/
 //This is the User Authentication controller Used when First Creating the User
 
 //Importing Json Web Token
@@ -215,7 +216,6 @@ exports.resetPassword = catchAsync (async (req,res,next)=>{
 exports.updatePassword = catchAsync(async (req,res,next)=>{
    //1) Get the user from the collection
    const user = await User.findById(req.user._id).select("+password")
-   console.log(user)
    if(!user) return next(new AppError("The User doesnot exist !!",400))
    //2) Check if the POSTed currentpassword is correct
    const  { currentPassword,newPassword,newPasswordConfirm } = req.body
