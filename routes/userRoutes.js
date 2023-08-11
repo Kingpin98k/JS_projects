@@ -30,7 +30,7 @@ userRouter.patch('/resetPassword/:token',authController.resetPassword);
 userRouter.patch('/updatePassword',authController.protect,authController.updatePassword)
 
 //Update the credentials of user (Done By User Only) (User Needs to be logged In)
-userRouter.patch('/updateMe',authController.protect,userController.updateMe)
+userRouter.patch('/updateMe',authController.protect,userController.uploadUserImage,userController.resizeUserImage,userController.updateMe)
 
 //Make the user delete himself if he is logged in (Just making him inactive)
 userRouter.delete('/deleteMe',authController.protect,userController.deleteMe)

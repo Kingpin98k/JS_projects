@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
         lowercase:true,
         validate:[validator.isEmail,'Please Provide a Valid Email !']
     },
-    photo:String,   //The uploaded Photo will be stored in outfile-system and the path to that photo will be stored in Photo field
+    photo:{//The uploaded Photo will be stored in outfile-system and the path to that photo will be stored in Photo field
+      type:String,
+      default:"default.jpg"
+    },
     role: {
         type: String,
         enum: ['user', 'guide', 'lead-guide', 'admin'],
