@@ -18,7 +18,7 @@
       <img src="/img/logo-white.png" alt="Natours logo" />
     </div>
     <nav class="nav nav--user">
-      <% if(user){ %>
+      <% if (typeof user !== 'undefined' && user){ %>
       <a href="#" id="logout/btn" class="nav__el nav__el--logout">Logout</a>
       <a href="/me" class="nav__el">
         <img class="nav__user-img" src="/img/users/<%= user.photo?user.photo:"user-1.jpg" %>" alt="User Photo">

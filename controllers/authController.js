@@ -7,7 +7,7 @@ const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
-const sendEmail = require("../utils/sendEmail")
+const Email = require("../utils/sendEmail")
 const AppError = require('../utils/appError')
 
 //This is a function to create and send the JWT when all the middleware checking is done
@@ -53,6 +53,10 @@ exports.signup = catchAsync(async (req,res,next)=>{
       password:req.body.password,
       confirmPassword:req.body.confirmPassword
    })
+
+   const url = `${req.protocol}://${req.get('host')}/me`  //this will get the right url in both pod and dev
+   await new Email(newUser,url).sendWelcome()
+
    createSendToken(newUser,201,res)
 })
 
@@ -160,11 +164,8 @@ exports.forgotPassword = catchAsync(async (req,res,next)=>{
    const message = `Forgot you password ? submit a PATCH request to ${resetURL}.\n If you didn't forget your password, please Ignore this message`
 
    try{
-      await sendEmail({
-         email:user.email,
-         subject:"Your Password Reset token (Valid for 10 mins only)",
-         message:message
-      })
+      await new Email(user,resetURL).sendPasswordReset()
+      
       res.status(200).json({
          status:"Success",
          message: "Token Sent to email"

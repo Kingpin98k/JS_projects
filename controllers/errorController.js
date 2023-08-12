@@ -40,14 +40,14 @@ const sendErrorDev = (err,req,res) => {
   }else{  //Error handling for the RENDERED WEBSITE
     res.status(err.statusCode).render('error',{
       title:"Something Went Wrong !",
-      msg:err.message
+      msg : err.message
     })
   }
 };
 
 const sendErrorProd = (err, req, res) => {
   //---------------->>API PART<<---------------------------
-  if(req.originalUrl.startsWith('/api')){  
+  if(req.originalUrl.startsWith('/api')){ 
       // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
