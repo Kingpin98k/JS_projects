@@ -101,10 +101,10 @@ module.exports = class Email{
     
             // Create the transport and send email
             const info = await this.createTransport().sendMail(mailOptions);
-            console.log('Email sent successfully!', info.messageId);
+            // console.log('Email sent successfully!', info.messageId);
             // The "info" object may contain additional details about the sent email
         } catch (error) {
-            console.error('Error sending email:', error);
+            // console.error('Error sending email:', error);
             throw error; // You can rethrow the error or handle it as per your requirement
         }
     }

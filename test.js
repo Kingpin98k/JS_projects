@@ -5,7 +5,7 @@ const data = fs.readFileSync("./dev-data/data/reviews.json")
 const jsonObj = JSON.parse(data)
 
 const promise_func = jsonObj.map(async (val)=>{
-      await fetch('http://127.0.0.1:9999/api/v1/reviews', {
+      await fetch('/api/v1/reviews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

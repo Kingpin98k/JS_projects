@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node ./server.js",
+    "start": "set NODE_ENV=production&& node ./server.js",
     "start-prod": "set NODE_ENV=production&& nodemon ./server.js",
     "start-dev": "set NODE_ENV=development&& nodemon ./server.js",
     "debug": "ndb server.js"
@@ -16,6 +16,7 @@
     "@babel/polyfill": "^7.12.1",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",

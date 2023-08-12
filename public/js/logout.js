@@ -4,7 +4,7 @@ const logout = async ()=>{
   try{
     const res = await axios({
       method:"GET",
-      url:"http://127.0.0.1:9999/api/v1/users/logout",
+      url:"/api/v1/users/logout",
     })
     if(res.data.status==='success'){
         showAlert('success',"Successfully Logged Out !!")

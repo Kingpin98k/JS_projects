@@ -68,7 +68,7 @@ exports.resizeUserImage = (req,res,next)=>{
 
 //Callback Function for param middleware to check for id
 exports.validateId =  (req,res,next,val)=>{
-   console.log("Now Printing -> ",val)
+  //  console.log("Now Printing -> ",val)
    next()
 }
 

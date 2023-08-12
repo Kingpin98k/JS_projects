@@ -4,7 +4,7 @@ const updateUserPassword = async (currentP,newP,confirmP)=>{
     try{
         const res = await axios({
             method:"PATCH",
-            url:"http://127.0.0.1:9999/api/v1/users/updatePassword",
+            url:"/api/v1/users/updatePassword",
             data:{
                 currentPassword:currentP,
                 newPassword:newP,
@@ -23,7 +23,7 @@ const updateUserInfo = async (form)=>{
   try{
     const res = await axios({
         method:"PATCH",
-        url:"http://127.0.0.1:9999/api/v1/users/updateMe",
+        url:"/api/v1/users/updateMe",
         data:form
       })
       if(res.data.status==="Successfully Updated"){

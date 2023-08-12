@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
+const compression = require('compression')
 
 //Path module this stores the path to the project directory 
 const path = require('path')
@@ -80,6 +81,8 @@ if(process.env.NODE_ENV==='development'){
     const morgan = require("morgan")
     app.use(morgan('dev'))
 }
+
+app.use(compression())  //This will compress the responses dramatically
 
 //Body Parser converting data from body int req.body
 app.use(express.json({limit:'32kb'}))  //setting the body limit ot 10kb
