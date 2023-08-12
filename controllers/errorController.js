@@ -52,7 +52,8 @@ const sendErrorProd = (err, req, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      error:err,
+      message: err.message,
     });
 
   // Programming or other unknown error: don't leak error details
@@ -89,18 +90,19 @@ const sendErrorProd = (err, req, res) => {
   }
 };
 
-module.exports = (err, req, res, next) => {
+module.exports = (error, req, res, next) => {
   // console.log(err.stack);
   //Sometimes some internal node errors may not have a status code 
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
+  error.statusCode = error.statusCode || 500;
+  error.status = error.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err,req, res);
+    sendErrorDev(error,req, res);
   } else if (process.env.NODE_ENV === 'production') {
-    //Creating a new error object using err and Object Destructuring
-    let error = { ...err };
-
+    // console.log(err.message)
+    // //Creating a new error object using err and Object Destructuring
+    // let error = { ...err };
+    // console.log(error)
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error._message === 'Validation failed') error = handleValidationErrorDB(error);
