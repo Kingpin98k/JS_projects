@@ -29,9 +29,7 @@ const updateUserInfo = async (form)=>{
       if(res.data.status==="Successfully Updated"){
         showAlert('success',"Info Updated")
       }
-      window.setTimeout(()=>{
         location.reload(true)
-      },1000)
   }catch(err){
     showAlert('error',err.response.data.message)
   }

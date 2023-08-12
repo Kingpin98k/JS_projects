@@ -8,9 +8,7 @@ const logout = async ()=>{
     })
     if(res.data.status==='success'){
         showAlert('success',"Successfully Logged Out !!")
-        window.setTimeout(()=>{
             location.reload(true);
-        },1000)
     }
   }catch(err){
     showAlert('error',err.response.data.message)

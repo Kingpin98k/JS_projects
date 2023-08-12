@@ -13,9 +13,7 @@ const signup = async (name,email,password,confirmPassword)=>{
       })
       if(res.data.status==="Created Successfully"){
         showAlert('success',"Account Created Successfully !!")
-        window.setTimeout(()=>{
          location.assign('/')
-        },1500)
       }
     }catch(err){
       showAlert('error',err.response.data.message)

@@ -13,9 +13,7 @@ const login = async (email,password)=>{
     })
     if(res.data.status==='Created Successfully'){
       showAlert('success','Logged In Successfully')   //either 'success' or 'error'
-      window.setTimeout(()=> {
         location.assign('/')
-      },1500)
     }
    }catch(err){
     showAlert('error',err.response.data.message)
