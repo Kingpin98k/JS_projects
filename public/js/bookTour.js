@@ -3,7 +3,7 @@ const bookThistour = async (tour_btn,tour_id)=>{
   try{
     const res = await axios({
         method:"POST",
-        url:`http://127.0.0.1:9999/api/v1/users/${tour_id}/my-bookings`
+        url:`/api/v1/users/${tour_id}/my-bookings`
        })
        if(res.data.status==="Successful"){
         showAlert('success',"Tour Added Successfully !")
