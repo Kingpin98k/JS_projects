@@ -155,7 +155,6 @@ tourSchema.virtual('reviews',{
   localField:'_id'  //tours local field
 })
 
-
 //------------------------------>GEOSPATIAL INDEXING<-----------------------------------
 tourSchema.index({startLocation:'2dsphere'})
 

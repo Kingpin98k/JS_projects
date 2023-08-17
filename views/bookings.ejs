@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include ('./partials/_head',{title:"My Bookings"}) %>
+  <body>
+    <!--HEADER-->
+    <%- include('./partials/_bookingsHeader.ejs') %>
+
+    <!--CONTENT-->
+    <!-- <section class="overview"> --> 
+
+    <%- include('./partials/_tourCardTemplate',{tours:tours}) %>
+
+    <!--Footer-->
+    <%- include('./partials/_footer') %>
+  </body>
+  <%- include('./partials/_jsElements') %>
+</html>

@@ -71,6 +71,7 @@ const userRouter = require('./routes/userRoutes')
 const tourRouter = require('./routes/tourRoutes')
 const reviewRouter = require('./routes/reviewRoutes')
 const viewRouter = require('./routes/viewRoutes')
+const bookingsRouter = require('./routes/bookingsRoutes')
 const cookieParser = require('cookie-parser')
 //---------------------------------------------------------------------------------------------
 
@@ -213,6 +214,7 @@ app.use(express.static('public'));
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/tours',tourRouter)
 app.use('/api/v1/reviews',reviewRouter)
+app.use('/api/v1/my-bookings',bookingsRouter)
 //Now setting up the route for showing the rendered page
 app.use('/',viewRouter)
 //Now Implementing A Global Error Handling Middleware:

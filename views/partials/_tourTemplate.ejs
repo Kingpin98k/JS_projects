@@ -1,3 +1,7 @@
+<script>
+  // Set the variable using the window object
+  window.this_tour = '<%= tour %>';
+</script>
 <section class="section-header">
       <div class="header__hero">
         <div class="header__hero-overlay">&nbsp;</div>
@@ -150,7 +154,8 @@
           <p class="cta__text">
             <%= tour.duration %> days. 1 adventure. Infinite memories. Make it yours today!
           </p>
-          <button class="btn btn--green span-all-rows">Book tour now!</button>
+          <button class="btn btn--green span-all-rows" id="book-tour-button">Book tour now!</button>
         </div>
       </div>
     </section>
+

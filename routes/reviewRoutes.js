@@ -4,13 +4,13 @@ const reviewController = require('../controllers/reviewController')
 
 const authController = require('../controllers/authController')
 
-const ReviewRouter = express.Router({mergeParams:true})
+const reviewRouter = express.Router({mergeParams:true})
 
-ReviewRouter.route('/')
+reviewRouter.route('/')
 .get(reviewController.getAllReviews)
 .post(authController.protect,reviewController.createNewReview)
 
-ReviewRouter.route('/:id')
+reviewRouter.route('/:id')
 .delete(reviewController.deleteReview)
 
-module.exports = ReviewRouter
+module.exports = reviewRouter

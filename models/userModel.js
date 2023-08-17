@@ -119,7 +119,6 @@ userSchema.pre(/^find/,function(next){  //Regex to catch any query starting with
    next()
 })
 
-
 //Creating the Model Out of the Schema
 const User = mongoose.model("User",userSchema)
 

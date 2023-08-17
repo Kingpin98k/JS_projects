@@ -37,4 +37,7 @@ viewRouter.get('/signup',authController.isLoggedIn,viewController.signupUser)
 //Accounts page
 viewRouter.get('/me',authController.protect,viewController.getAccount)
 
+//Route to render all the booked tours
+viewRouter.get('/my-bookings',authController.protect,viewController.getMyBookings)
+
 module.exports = viewRouter
