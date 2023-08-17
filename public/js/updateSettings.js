@@ -42,8 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const form = new FormData()
         
         //Now appending data to our new form object
+        if(document.getElementById('name').value!==undefined)
         form.append('name',document.getElementById('name').value)
+        if(document.getElementById('email').value!==undefined)
         form.append('email',document.getElementById('email').value)
+        if(document.getElementById('photo').value!==undefined)
         form.append('photo',document.getElementById('photo').files[0])  //Files[0] since files is a an array of all the files
         updateUserInfo(form)
     })
