@@ -5,9 +5,9 @@ class AppError extends Error{
        super(message)
 
        this.statusCode = statusCode
-       this.status = `${statusCode}`.startsWith('4')?"fail":"error";
+       this.status = `${statusCode}`.startsWith('4')?"fail":"error"; //Easy Way Of Converting Statuscode to String
        
-       //To check in future if the error is an operational error or some programattic/logical error
+       //To check in future if the error is an operational error or some programatic/logical error
        this.isOperational=true
 
 

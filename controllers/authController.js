@@ -116,9 +116,12 @@ exports.protect = catchAsync(async (req,res,next)=>{
       return next(new AppError("Password was changed ! Please Login again to continue..",401))
    }
    //We save the current user in the request object for use in later middlewares...If Required !!
-   //but this is how we can pass refinde data from one middleware to another sequentially
+   //but this is how we can pass refined data from one middleware to another sequentially
    req.user = currentUser
+
+   //Now we can use this in the window
    res.locals.user = currentUser
+
    next()
 })
 

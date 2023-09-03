@@ -314,6 +314,7 @@
     -ms-flex-align: center;
     align-items: center;
   }
+
   @media only screen and (max-width: 62.5em) {
     .header {
       -webkit-box-orient: vertical;
@@ -1076,6 +1077,42 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 7rem;
+  }
+
+  @media(max-width:85em){
+
+    .card-container
+    {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 1.2rem;
+    }
+    .card{
+      width: 70%;
+      justify-self: center;
+    }
+    .section-header{
+      max-height: 10%;
+    }
+  }
+
+  @media(max-width:59em){
+    .card-container{
+      grid-template-columns: 1fr;
+      padding: 4rem;
+    }
+    .card{
+      max-width: 80%;
+    }
+    .main{
+      padding: 0;
+    }
+    .header{
+      height: auto;
+      padding: 2.4rem;
+    }
+    .section-header{
+      max-height: 30%;
+    }
   }
   
   .card {

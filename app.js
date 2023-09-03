@@ -85,17 +85,20 @@ if(process.env.NODE_ENV==='development'){
 
 app.use(compression())  //This will compress the responses dramatically
 
-//Body Parser converting data from body int req.body
+//Body Parser converting data from body into req.body
 app.use(express.json({limit:'32kb'}))  //setting the body limit ot 10kb
 
 //Cookie Parser to allow express to access cookies incoming with browser requests
 app.use(cookieParser())
 
-//Custom Middleware to set the current ime to request object
+//Custom Middleware to set the current time to request object
 app.use((req,res,next)=>{
     req.requestTime = new Date().toISOString()
     next()
 })
+
+//Now Implementing A Global Error Handling Middleware:
+app.use(globalErrroHandler)
 
 //---------------------------------------------------------------------------------------------
 // Creating "Tours" Route for API Version 1
@@ -217,8 +220,6 @@ app.use('/api/v1/reviews',reviewRouter)
 app.use('/api/v1/my-bookings',bookingsRouter)
 //Now setting up the route for showing the rendered page
 app.use('/',viewRouter)
-//Now Implementing A Global Error Handling Middleware:
-app.use(globalErrroHandler)
 
 //If the program was able to get to "this" point then this means it was not handled by any of the outher route handlers
 //Implementing a route handler to handle-unhandled/incorrect routes

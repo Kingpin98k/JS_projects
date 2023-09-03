@@ -111,7 +111,7 @@ exports.getSelectedTours = catchAsync(async (req,res,next)=>{
   //If the tourId does not match mongoDb sets data to null and response code is 200 
   //but we want to set it to 404 
   if(!selectedTour){
-    return next(new AppError('No Tour found with that ID', 404))  //We are returninghere to prevent code to move to next line and send 2-responses
+    return next(new AppError('No Tour found with that ID', 404))  //We are returning here to prevent code to move to next line and send 2-responses
   }
 
   res.status(200).json({

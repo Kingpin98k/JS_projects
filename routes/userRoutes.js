@@ -40,7 +40,7 @@ userRouter.patch('/updateMe',authController.protect,userController.uploadUserIma
 //Make the user delete himself if he is logged in (Just making him inactive)
 userRouter.delete('/deleteMe',authController.protect,userController.deleteMe)
 
-//Route to get th einfo about the currently loggedIn User
+//Route to get the info about the currently loggedIn User
 userRouter.get('/me',authController.protect,userController.getMe,userController.getSelectedUser)
 
 //1->GetAll/Create-New Users
